@@ -72,7 +72,7 @@ int is_all_positive(const int numbers[], const size_t element_count)
     }
 
     for (i = 0; i < element_count; ++i) {
-        if (numbers[i] <=0) {
+        if (numbers[i] <= 0) {
             return 0;
         }
     }
@@ -106,7 +106,7 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
     }
     
     for (i = element_count; i > pos; --i) {
-         numbers[i] = numbers[i - 1];
+        numbers[i] = numbers[i - 1];
     }
     numbers[pos] = num;
     return 1;
@@ -120,7 +120,7 @@ int remove_at(int numbers[], const size_t element_count, const size_t index)
         return 0;
     }
     for (i = index; i < element_count; ++i) {
-         numbers[i] = numbers[i + 1];
+        numbers[i] = numbers[i + 1];
     }
     
     return 1;
