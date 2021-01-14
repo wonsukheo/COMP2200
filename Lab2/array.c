@@ -56,7 +56,7 @@ int get_min_index(const int numbers[], const size_t element_count)
     }
     for (i = 1; i < element_count; ++i) {
         if (numbers[i] < min) {
-	    min = numbers[i];
+            min = numbers[i];
             min_index = i;
         }
     }
