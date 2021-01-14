@@ -39,7 +39,7 @@ int get_max_index(const int numbers[], const size_t element_count)
         if (numbers[i] > max) {
             max = numbers[i];
             max_index = i;
-	}
+        }
     }
 
     return max_index;
@@ -67,12 +67,12 @@ int get_min_index(const int numbers[], const size_t element_count)
 int is_all_positive(const int numbers[], const size_t element_count)
 {
     size_t i;
-    
     if (element_count == 0) {
         return 0;
     }
+
     for (i = 0; i < element_count; ++i) {
-        if (numbers[i] % 2 != 0) {
+        if (numbers[i] <=0) {
             return 0;
         }
     }
@@ -104,11 +104,11 @@ int insert(int numbers[], const size_t element_count, const int num, const size_
     if (pos > element_count) {
         return 0;
     }
+    
     for (i = element_count; i > pos; --i) {
          numbers[i] = numbers[i - 1];
-         numbers[pos] = num;
     }
-   
+    numbers[pos] = num;
     return 1;
 }
     
