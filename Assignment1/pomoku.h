@@ -25,8 +25,6 @@ int place_stone(const color_t color, const size_t row, const size_t col);
 
 void check_score(const color_t color, const size_t row, const size_t col);
 
-void color_count(size_t same_color);
-
 void check_score_col(const color_t color, const size_t row, const size_t col);
 
 void check_score_row(const color_t color, const size_t row, const size_t col);

@@ -8,12 +8,12 @@
 
 color_t player1 = COLOR_BLACK;
 color_t player2 = COLOR_WHITE;
-size_t player1_score = 0;
-size_t player2_score = 0;
+size_t g_player1_score;
+size_t g_player2_score;
 
 int board[20][20];
-size_t row_count = 0;
-size_t col_count = 0;
+size_t g_row_count = 15;
+size_t g_col_count = 15;
 
 
 void init_game(void)
@@ -39,50 +39,50 @@ void init_game(void)
                          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-                     };
-     player1_score = 0;
-     player2_score = 0;
-     row_count = 15;
-     col_count = 15;
+     };
+     g_player1_score = 0;
+     g_player2_score = 0;
+     g_row_count = 15;
+     g_col_count = 15;
         
 }
 
 size_t get_row_count(void)
 {
        size_t i;
-       row_count = 0;
+       g_row_count = 0;
 
        for (i = 0; i < ROW_LENGTH(board); ++i) {
            if (board[i][0] != 0) {
-               row_count += 1;
+               g_row_count += 1;
            } else if (board[i][0] == 0) {
                break;
            }
        }
-       return row_count; 
+       return g_row_count; 
 }
 
 size_t get_column_count(void)
 {
        size_t i;
-       col_count = 0;
+       g_col_count = 0;
 
        for (i = 0; i < COL_LENGTH(board); ++i) {
            if (board[0][i] != 0) {
-               col_count += 1;
+               g_col_count += 1;
            } else if (board[0][i] == 0) {
                break;
            }
        }
-       return col_count; 
+       return g_col_count; 
 }
 
 int get_score(const color_t color)
 {
     if (color == player1) {
-        return player1_score;
+        return g_player1_score;
     } else if (color == player2) {
-        return player2_score;
+        return g_player2_score;
     } else {
         return -1;
     }
@@ -129,28 +129,28 @@ int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
-    size_t* player_score = NULL;
+    size_t* player_score;
     
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
     
-    if (row_count == 20 || row > 20) {
+    if (g_row_count == 20 || row > 20) {
         return FALSE;
     }
-
     if (*player_score < 3) {
         return FALSE;
     } else {
         *player_score -= 3;
     }
    
-    for (i = row_count; i > row; --i) {
-        for (j = 0; j < col_count; ++j) {
+    for (i = g_row_count; i > row; --i) {
+        for (j = 0; j < g_col_count; ++j) {
             board[i][j] = board[i - 1][j];
         }
     }
-    
-    board[row] = { 0, };
-    row_count += 1;
+    for (i = 0; i < COL_LENGTH(board); ++i) {
+        board[row][i] = 0;
+    }
+    g_row_count += 1;
     
     return TRUE;  
 }
@@ -159,11 +159,11 @@ int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
-    size_t* player_score = NULL;
+    size_t* player_score;
     
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
-    if (col_count == 20 || col > 20) {
+    if (g_col_count == 20 || col > 20) {
         return FALSE;
     }
     
@@ -173,14 +173,14 @@ int insert_column(const color_t color, const size_t col)
         *player_score -= 3;
     }
  
-    for (i = 0; i < row_count; ++i) {
-        for (j = col_count; j >= col; --j) {
+    for (i = 0; i < g_row_count; ++i) {
+        for (j = g_col_count; j >= col; --j) {
             board[i][j] = board[i][j - 1];
         }
         board[i][col - 1] = 0;
     }
     
-    col_count += 1;
+    g_col_count += 1;
     return TRUE;  
 }
 
@@ -188,11 +188,11 @@ int remove_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
-    size_t* player_score = NULL;
+    size_t* player_score;
     
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
-    if (row_count == 10) {
+    if (g_row_count == 10) {
         return FALSE;
     }
     
@@ -202,14 +202,16 @@ int remove_row(const color_t color, const size_t row)
         *player_score -= 3;
     }
 
-    for (i = row; i < row_count; ++i) {
-        for (j = 0; j < col_count; ++j) {
+    for (i = row; i < g_row_count; ++i) {
+        for (j = 0; j < g_col_count; ++j) {
             board[i - 1][j] = board[i][j];
         }
     }
     
-    board[row_count] = { 0, };
-    row_count -= 1;
+    for (i = 0; i < COL_LENGTH(board); ++i) {
+        board[row][i] = 0;
+    }
+    g_row_count -= 1;
     return TRUE;
 }
 
@@ -217,11 +219,11 @@ int remove_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;
-    size_t* player_score = NULL;
+    size_t* player_score;
     
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
-    if (col_count == 10) {
+    if (g_col_count == 10) {
         return FALSE;
     }
     
@@ -231,27 +233,27 @@ int remove_column(const color_t color, const size_t col)
         *player_score -= 3;
     }
     
-    for (i = 0; i < row_count; ++i) {
-        for (j = col; j < col_count; ++j) {
+    for (i = 0; i < g_row_count; ++i) {
+        for (j = col; j < g_col_count; ++j) {
             board[i][j - 1] = board[i][j];
         }
-        board[i][col_count - 1] = 0;
+        board[i][g_col_count - 1] = 0;
     }
     
-    col_count -= 1;
+    g_col_count -= 1;
     return TRUE; 
 }
 
 int swap_rows(const color_t color, const size_t row0, const size_t row1)
 {
     size_t i;
-    size_t* player_score = NULL;
-    temp_arr[col_count] = { 0, }; 
+    size_t* player_score;
+    int temp_arr[g_col_count] = { 0, }; 
    
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
     
-    if (row0 > row_count || row1 > row_count) {
+    if (row0 > g_row_count || row1 > g_row_count) {
         return FALSE;
     }
 
@@ -261,7 +263,7 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
         *player_score -= 2;
     }
 
-    for (i = 0; i < col_count; ++i) {
+    for (i = 0; i < g_col_count; ++i) {
         temp_arr[i] = board[row0][i];
         board[row0][i] = board[row1][i];
         board[row0][i] = temp_arr[i];
@@ -273,13 +275,13 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
 int swap_columns(const color_t clor, const size_t col0, const size_t col1)
 {
     size_t i;
-    size_t* player_score = NULL;
-    temp_arr[col_count] = { 0, }; 
+    size_t* player_score;
+    int temp_arr[g_col_count] = { 0, }; 
    
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
     
-    if (col0 > col_count || col1 > col_count) {
+    if (col0 > g_col_count || col1 > g_col_count) {
         return FALSE;
     }
 
@@ -289,7 +291,7 @@ int swap_columns(const color_t clor, const size_t col0, const size_t col1)
         *player_score -= 2;
     }
 
-    for (i = 0; i < row_count; ++i) {
+    for (i = 0; i < g_row_count; ++i) {
         temp_arr[i] = board[i][col0];
         board[i][col0] = board[i][col1];
         board[i][col1] = temp_arr[i];
@@ -301,13 +303,13 @@ int swap_columns(const color_t clor, const size_t col0, const size_t col1)
 int copy_row(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
-    size_t* player_score = NULL;
-    temp_arr[col_count] = { 0, }; 
+    size_t* player_score;
+    int temp_arr[g_col_count] = { 0, }; 
    
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
     
-    if (src > row_count || dst > row_count) {
+    if (src > g_row_count || dst > g_row_count) {
         return FALSE;
     }
 
@@ -317,7 +319,7 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
         *player_score -= 4;
     }
 
-    for (i = 0; i < col_count; ++i) {
+    for (i = 0; i < g_col_count; ++i) {
         board[dst][i] = board[src][i];
     }
     
@@ -327,13 +329,13 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 int copy_column(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
-    size_t* player_score = NULL;
-    temp_arr[col_count] = { 0, }; 
+    size_t* player_score;
+    int temp_arr[g_col_count] = { 0, }; 
    
-    color = player1 ? player_score = &player1_score : player_score = &player2_score;
+    color == player1 ? player_score = &g_player1_score : player_score = &g_player2_score;
 
     
-    if (src > col_count || dst > col_count) {
+    if (src > g_col_count || dst > g_col_count) {
         return FALSE;
     }
 
@@ -343,7 +345,7 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
         *player_score -= 4;
     }
 
-    for (i = 0; i < row_count; ++i) {
+    for (i = 0; i < g_row_count; ++i) {
         board[i][dst] = board[i][src];
     }
     
@@ -352,64 +354,25 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
 
 void check_score(const color_t color, const size_t row, const size_t col)
 {
-    size_t i = 0;
-    int stone_color = B;
-    int* player_score = &player1_score;
-    size_t same_color = 0;
-    
-    if (color == player2) {
-        stone_color = W;
-        player_score = &player2_score;
-    }
-
     check_score_row(color, row, col);
     check_score_col(color, row, col);
     check_score_NE(color, row, col);
     check_score_NW(color, row, col);
 }
 
-void color_count(size_t same_color)
-{
-    if (same_color >= 5) {
-        *player_score += 1;
-    }
-    if (same_color >= 6) {
-        *player_score += 2;
-    }
-    if (same_color >= 7) {
-        *player_score += 3;
-    }  
-}
-
-void check_score_col(const color_t color, const size_t row, const size_t col)
-{
-    same_color = 0;
-   
-    for (i = col; i < col_count; ++i) {
-        if (board[row][i + 1] == stone_color) {
-            same_color += 1;
-        }
-        if (board[row][i + 1] != stone_color) {
-            break;
-        }
-    }
-    for (i = col; i > 0; --i) {
-        if (board[row][i - 1] == stone_color) {
-            same_color += 1;
-        }
-        if (board[row][i - 1] != stone_color) {
-            break;
-        }
-    }
-    
-    color_count(same_color);
-}
-
 void check_score_row(const color_t color, const size_t row, const size_t col)
 {
-    same_color = 0;
+    size_t i = 0;
+    int stone_color = 'B';
+    size_t* player_score = &g_player1_score;
+    size_t same_color = 0;
+    
+    if (color == player2) {
+        stone_color = 'W';
+        player_score = &g_player2_score;
+    }
 
-    for (i = row; i < row_count; ++i) {
+    for (i = row; i < g_row_count; ++i) {
         if (board[i + 1][col] == stone_color) {
             same_color += 1;
         } 
@@ -426,14 +389,71 @@ void check_score_row(const color_t color, const size_t row, const size_t col)
         }
     }
 
-    color_count(same_color);
+    if (same_color >= 5) {
+        *player_score += 1;
+    }
+    if (same_color >= 6) {
+        *player_score += 2;
+    }
+    if (same_color >= 7) {
+        *player_score += 3;
+    }  
+}
+
+void check_score_col(const color_t color, const size_t row, const size_t col)
+{
+    size_t i = 0;
+    int stone_color = 'B';
+    size_t* player_score = &g_player1_score;
+    size_t same_color = 0;
+    
+    if (color == player2) {
+        stone_color = 'W';
+        player_score = &g_player2_score;
+    }
+   
+    for (i = col; i < g_col_count; ++i) {
+        if (board[row][i + 1] == stone_color) {
+            same_color += 1;
+        }
+        if (board[row][i + 1] != stone_color) {
+            break;
+        }
+    }
+    for (i = col; i > 0; --i) {
+        if (board[row][i - 1] == stone_color) {
+            same_color += 1;
+        }
+        if (board[row][i - 1] != stone_color) {
+            break;
+        }
+    }
+    
+    if (same_color >= 5) {
+        *player_score += 1;
+    }
+    if (same_color >= 6) {
+        *player_score += 2;
+    }
+    if (same_color >= 7) {
+        *player_score += 3;
+    }  
 }
 
 void check_score_NE(const color_t color, const size_t row, const size_t col)
 {
-    same_color = 0;
+    size_t i = 0;
+    int stone_color = 'B';
+    size_t* player_score = &g_player1_score;
+    size_t same_color = 0;
+    
+    if (color == player2) {
+        stone_color = 'W';
+        player_score = &g_player2_score;
+    }
 
-    for (i = 1; i <= row && i < (col_count - col); ++i) {
+
+    for (i = 1; i <= row && i < (g_col_count - col); ++i) {
         if (board[row - i][col + i] == stone_color) {
             same_color += 1;
         }
@@ -441,7 +461,7 @@ void check_score_NE(const color_t color, const size_t row, const size_t col)
             break;
         }
     }
-    for (i = 1; i < (row_count - row) && i <= col; ++i) {
+    for (i = 1; i < (g_row_count - row) && i <= col; ++i) {
         if (board[row + i][col - i] == stone_color) {
             same_color += 1;
         }
@@ -450,12 +470,29 @@ void check_score_NE(const color_t color, const size_t row, const size_t col)
         }
     }
 
-    color_count(same_color);
+    if (same_color >= 5) {
+        *player_score += 1;
+    }
+    if (same_color >= 6) {
+        *player_score += 2;
+    }
+    if (same_color >= 7) {
+        *player_score += 3;
+    }  
 }
 
 void check_score_NW(const color_t color, const size_t row, const size_t col)
 {
-    same_color = 0;
+    size_t i = 0;
+    int stone_color = 'B';
+    size_t* player_score = &g_player1_score;
+    size_t same_color = 0;
+    
+    if (color == player2) {
+        stone_color = 'W';
+        player_score = &g_player2_score;
+    }
+
 
     for (i = 1; i <= row && i <= col; ++i) {
         if (board[row - i][col - i] == stone_color) {
@@ -465,7 +502,7 @@ void check_score_NW(const color_t color, const size_t row, const size_t col)
             break;
         }
     }
-    for (i = 1; i < (row_count - row) && i < (col_count = col); ++i) {
+    for (i = 1; i < (g_row_count - row) && i < (g_col_count = col); ++i) {
         if (board[row + i][col + i] == stone_color) {
             same_color += 1;
         }
@@ -474,6 +511,14 @@ void check_score_NW(const color_t color, const size_t row, const size_t col)
         }
     }
 
-    color_count(same_color);
+    if (same_color >= 5) {
+        *player_score += 1;
+    }
+    if (same_color >= 6) {
+        *player_score += 2;
+    }
+    if (same_color >= 7) {
+        *player_score += 3;
+    }  
 }
 
