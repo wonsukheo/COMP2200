@@ -6,8 +6,8 @@
 #define TRUE (1)
 #define FALSE (0)
 
-color_t player1 = COLOR_BLACK
-color_t player2 = COLOR_WHITE
+color_t player1 = COLOR_BLACK;
+color_t player2 = COLOR_WHITE;
 size_t player1_score = 0;
 size_t player2_score = 0;
 
@@ -90,9 +90,9 @@ int get_score(const color_t color)
 
 int get_color(const size_t row, const size_t col)
 {
-    if (board[row][col] == B) {
+    if (board[row][col] == 'B') {
         return 0;
-    } else if (board[row][col] == W) {
+    } else if (board[row][col] == 'W') {
         return 1;
     } else {
         return -1;
@@ -115,17 +115,17 @@ int place_stone(const color_t color, const size_t row, const size_t col)
     }
     
     if (color == player1) {
-        board[row][col] = B;
+        board[row][col] = 'B';
     }
     if (color == player2) {
-        board[row][col] = W;
+        board[row][col] = 'W';
     }
-    check_score(color, row, col)
+    check_score(color, row, col);
     return TRUE;
 }
 
 /* special moves */
-int insert row(const color_t color, const size_t row)
+int insert_row(const color_t color, const size_t row)
 {
     size_t i;
     size_t j;
@@ -155,7 +155,7 @@ int insert row(const color_t color, const size_t row)
     return TRUE;  
 }
 
-int insert column(const color_t color, const size_t col)
+int insert_column(const color_t color, const size_t col)
 {
     size_t i;
     size_t j;

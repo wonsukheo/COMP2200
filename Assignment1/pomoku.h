@@ -5,7 +5,7 @@
 #define FALSE (0)
 
 typedef enum color {
-	COLOR_BLACK
+	COLOR_BLACK,
 	COLOR_WHITE
 } color_t;
 
@@ -37,9 +37,9 @@ void check_score_NW(const color_t color, const size_t row, const size_t col);
 
 
 /* special moves */
-int insert row(const color_t color, const size_t row);
+int insert_row(const color_t color, const size_t row);
 
-int insert column(const color_t color, const size_t col);
+int insert_column(const color_t color, const size_t col);
 
 int remove_row(const color_t color, const size_t row);
 
