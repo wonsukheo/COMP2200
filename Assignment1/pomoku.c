@@ -19,7 +19,7 @@ size_t g_col_count = 15;
 
 void init_game(void)
 {
-     int board[20][20]= {
+     board[20][20]= {
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
@@ -111,7 +111,7 @@ int is_placeable(const size_t row, const size_t col)
 
 int place_stone(const color_t color, const size_t row, const size_t col)
 {
-    if (is_placeable == FALSE) {
+    if (is_placeable(row, col) == FALSE) {
         return FALSE;
     }
     
@@ -273,7 +273,7 @@ int swap_rows(const color_t color, const size_t row0, const size_t row1)
     return TRUE;
 }
 
-int swap_columns(const color_t clor, const size_t col0, const size_t col1)
+int swap_columns(const color_t color, const size_t col0, const size_t col1)
 {
     size_t i;
     size_t* player_score;
@@ -305,7 +305,6 @@ int copy_row(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
     size_t* player_score;
-    int temp_arr[COL_LENGTH(board)] = { 0, }; 
    
     color == player1 ? (player_score = &g_player1_score) : (player_score = &g_player2_score);
 
@@ -331,7 +330,6 @@ int copy_column(const color_t color, const size_t src, const size_t dst)
 {
     size_t i;
     size_t* player_score;
-    int temp_arr[COL_LENGTH(board)] = { 0, }; 
    
     color == player1 ? (player_score = &g_player1_score) : (player_score = &g_player2_score);
 
