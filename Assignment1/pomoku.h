@@ -33,6 +33,7 @@ void check_score_NE(const color_t color, const size_t row, const size_t col);
 
 void check_score_NW(const color_t color, const size_t row, const size_t col);
 
+void increase_score(size_t same_color, size_t* player_score);
 
 /* special moves */
 int insert_row(const color_t color, const size_t row);
