@@ -11,14 +11,14 @@ color_t player2 = COLOR_WHITE;
 size_t g_player1_score;
 size_t g_player2_score;
 
-int board[20][20] = { 0, };
+int board[20][20];
 size_t g_row_count = 15;
 size_t g_col_count = 15;
 
 
 void init_game(void)
 {
-     board[20][20]= {
+     board[20][20] = {
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
