@@ -1,6 +1,5 @@
 #ifndef CYBER_SPACESHIP_H
 #define CYBER_SPACESHIP_H
-#include <stdlib.h>
 
 void update_overlapped_count(const size_t cluster_count, const char* const cluster_start_location[], const size_t cluster_lengths[], const char* current_location, size_t* overlapped_count);
 

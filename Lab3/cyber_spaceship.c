@@ -14,7 +14,7 @@ void update_overlapped_count(const size_t cluster_count, const char* const clust
      } 
 }
 
-const char* update_longest_safe_area_length(size_t safe_area_length, size_t* longest_safe_area_length, const char* current_location)
+const char* update_longest_safe_area_length(size_t safe_area_length, size_t* longest_safe_area_length, const char* current_location, char* longest_safe_area)
 {
      if (safe_area_length >= *longest_safe_area_length) {
          *longest_safe_area_length = safe_area_length;
@@ -29,7 +29,7 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
 	    const char* current_location = cab_start_location; 
             size_t safe_area_length = 0;
             size_t longest_safe_area_length = 0;
-            const char* longest_safe_area;
+            const char* longest_safe_area = 0;
             size_t overlapped_count = 0;            
             size_t i;
 
@@ -41,14 +41,14 @@ const char* get_longest_safe_zone_or_null(const char* const cab_start_location, 
                      safe_area_length += 1;
                  } 
                  if (overlapped_count % 2 != 0) {
-                     longest_safe_area = update_longest_safe_area_length(safe_area_length, &longest_safe_area_length, current_location);
+                     longest_safe_area = update_longest_safe_area_length(safe_area_length, &longest_safe_area_length, current_location, longest_safe_area);
                      safe_area_length = 0;
                  }
                
                  ++current_location;
             }
 
-            longest_safe_area = update_longest_safe_area_length(safe_area_length, &longest_safe_area_length, current_location);
+            longest_safe_area = update_longest_safe_area_length(safe_area_length, &longest_safe_area_length, current_location, longest_safe_area);
 
             *out_longest_safe_area_length = longest_safe_area_length;
            

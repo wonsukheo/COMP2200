@@ -1,6 +1,6 @@
 #include <assert.h>
 #include "cyber_spaceship.h"
-#include <stdlib.h>
+
 #define CAB_LENGTH (50)
 
 int main(void)
