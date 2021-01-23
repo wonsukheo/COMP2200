@@ -3,9 +3,6 @@
 #define ROW_LENGTH(arr) (sizeof(arr) / sizeof(arr[0]))
 #define COL_LENGTH(arr) (sizeof(arr[0]) / sizeof(arr[0][0]))
 
-#define TRUE (1)
-#define FALSE (0)
-
 color_t g_player1 = COLOR_BLACK;
 color_t g_player2 = COLOR_WHITE;
 size_t g_player1_score;
@@ -145,7 +142,7 @@ int insert_row(const color_t color, const size_t row)
     for (i = 0; i < COL_LENGTH(g_board); ++i) {
         if (i < g_col_count) {
             g_board[row][i] = 1;
-        } else  if (i >= g_col_count) {
+        } else if (i >= g_col_count) {
             g_board[row][i] = 0;
         }
     }
@@ -359,8 +356,8 @@ void check_score(const color_t color, const size_t row, const size_t col)
 {
     check_score_row(color, row, col);
     check_score_col(color, row, col);
-    check_score_NE(color, row, col);
-    check_score_NW(color, row, col);
+    check_score_ne(color, row, col);
+    check_score_nw(color, row, col);
 }
 
 void increase_score(size_t same_color, size_t* player_score)
@@ -433,7 +430,7 @@ void check_score_col(const color_t color, const size_t row, const size_t col)
     increase_score(same_color, player_score); 
 }
 
-void check_score_NE(const color_t color, const size_t row, const size_t col)
+void check_score_ne(const color_t color, const size_t row, const size_t col)
 {
     size_t i = 0;
     int stone_color = 'B';
@@ -466,7 +463,7 @@ void check_score_NE(const color_t color, const size_t row, const size_t col)
     increase_score(same_color, player_score); 
 }
 
-void check_score_NW(const color_t color, const size_t row, const size_t col)
+void check_score_nw(const color_t color, const size_t row, const size_t col)
 {
     size_t i = 0;
     int stone_color = 'B';
