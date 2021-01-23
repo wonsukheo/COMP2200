@@ -30,7 +30,7 @@ void init_game(void)
         }     
     }
     
-    for (i = g_row_count; i < ROW_LENGTH(board); ++i) {
+    for (i = g_row_count; i < ROW_LENGTH(g_board); ++i) {
         for (j = 0; j < COL_LENGTH(g_board); ++j) {
             g_board[i][j] = 0;
         }
@@ -46,7 +46,7 @@ size_t get_row_count(void)
     size_t i;
     g_row_count = 0;
 
-    for (i = 0; i < ROW_LENGTH(board); ++i) {
+    for (i = 0; i < ROW_LENGTH(g_board); ++i) {
         if (g_board[i][0] != 0) {
             g_row_count += 1;
         } else if (g_board[i][0] == 0) {
@@ -377,7 +377,7 @@ void check_score_row(const color_t color, const size_t row, const size_t col)
     size_t* player_score = &g_player1_score;
     size_t same_color = 0;
     
-    if (color == player2) {
+    if (color == g_player2) {
         stone_color = 'W';
         player_score = &g_player2_score;
     }
@@ -408,7 +408,7 @@ void check_score_col(const color_t color, const size_t row, const size_t col)
     size_t* player_score = &g_player1_score;
     size_t same_color = 0;
     
-    if (color == player2) {
+    if (color == g_player2) {
         stone_color = 'W';
         player_score = &g_player2_score;
     }
@@ -440,7 +440,7 @@ void check_score_NE(const color_t color, const size_t row, const size_t col)
     size_t* player_score = &g_player1_score;
     size_t same_color = 0;
     
-    if (color == player2) {
+    if (color == g_player2) {
         stone_color = 'W';
         player_score = &g_player2_score;
     }
@@ -473,7 +473,7 @@ void check_score_NW(const color_t color, const size_t row, const size_t col)
     size_t* player_score = &g_player1_score;
     size_t same_color = 0;
     
-    if (color == player2) {
+    if (color == g_player2) {
         stone_color = 'W';
         player_score = &g_player2_score;
     }
