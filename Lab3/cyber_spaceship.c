@@ -80,6 +80,6 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
         ++current_location;
     }    
     
-    return (int)(travel_time + 0.5);
+    return (int)(travel_time + 0.51);
 }
 
