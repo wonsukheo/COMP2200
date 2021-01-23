@@ -71,10 +71,10 @@ int get_travel_time(const char* const cab_start_location, const size_t cab_lengt
         update_overlapped_count(cluster_count, cluster_start_locations, cluster_lengths, current_location, &overlapped_count);
         
         if ((overlapped_count == 0) || (overlapped_count % 2 == 0)) {
-            travel_time += safe_area_travel_speed;
+            travel_time += SAFE_AREA_TRAVEL_SPEED;
         } 
         if (overlapped_count % 2 != 0) {
-            travel_time += cluster_area_travel_speed;
+            travel_time += CLUSTER_AREA_TRAVEL_SPEED;
         }
         
         ++current_location;
