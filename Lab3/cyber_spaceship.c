@@ -16,7 +16,10 @@ void update_overlapped_count(const size_t cluster_count, const char* const clust
 
 const char* update_longest_safe_area_length(size_t safe_area_length, size_t* longest_safe_area_length, const char* current_location, const char* longest_safe_area)
 {
-     if (safe_area_length > *longest_safe_area_length) {
+     if (safe_area_length == 0 || longest_safe_area_length == 0) {
+         return longest_safe_area;
+     }
+     if (safe_area_length >= *longest_safe_area_length) {
          *longest_safe_area_length = safe_area_length;
          
          return current_location;
