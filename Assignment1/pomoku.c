@@ -18,6 +18,9 @@ size_t g_col_count = 15;
 
 void init_game(void)
 {
+    g_row_count = 15;
+    g_col_count = 15;    
+
     size_t i;
     size_t j;
     for (i = 0; i < g_row_count; ++i) {
@@ -37,8 +40,6 @@ void init_game(void)
     }
     g_player1_score = 0;
     g_player2_score = 0;
-    g_row_count = 15;
-    g_col_count = 15;      
 }
 
 size_t get_row_count(void)
