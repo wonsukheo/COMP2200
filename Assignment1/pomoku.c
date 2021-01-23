@@ -18,11 +18,13 @@ size_t g_col_count = 15;
 
 void init_game(void)
 {
-    g_row_count = 15;
-    g_col_count = 15;    
-
     size_t i;
     size_t j;
+    g_row_count = 15;
+    g_col_count = 15;    
+    g_player1_score = 0;
+    g_player2_score = 0;
+
     for (i = 0; i < g_row_count; ++i) {
         for (j = 0; j < COL_LENGTH(g_board); ++j) {
             if (j < g_col_count) {
@@ -38,8 +40,6 @@ void init_game(void)
             g_board[i][j] = 0;
         }
     }
-    g_player1_score = 0;
-    g_player2_score = 0;
 }
 
 size_t get_row_count(void)
