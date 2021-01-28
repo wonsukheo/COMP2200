@@ -3,7 +3,7 @@
 
 size_t strlen(const char* str);
 
-char* strstr(char* str, const char* substr);
+char* strsubstr(char* str, const char* substr);
 
 void reverse(char* str);
 

@@ -13,7 +13,7 @@ size_t strlen(const char* str)
     return (size_t)(p - str);
 }
 
-char* strstr(char* str, const char* substr)
+char* strsubstr(char* str, const char* substr)
 {
     /* return * of string where substring found */
 
@@ -62,7 +62,7 @@ int index_of(const char* str, const char* word)
 {
     /* return first index of word, -1 if not found */
     
-    char* p = strstr(str, word);
+    char* p = strsubstr(str, word);
     
     if (p == NULL) { 
         return -1;
