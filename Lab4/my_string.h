@@ -1,7 +1,7 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
 
-size_t strlen(const char* str);
+size_t strlen(const char* string);
 
 char* strsubstr(const char* str, const char* substr);
 

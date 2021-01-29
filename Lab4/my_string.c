@@ -2,15 +2,15 @@
 
 static char* ptr = NULL;
 
-size_t strlen(const char* str)
+size_t strlen(const char* string)
 {
-    const char* p = str;
+    const char* p = string;
     
     while (*p != '\0') {
         p++;
     }
     
-    return (size_t)(p - str);
+    return (size_t)(p - string);
 }
 
 char* strsubstr(const char* str, const char* substr)
