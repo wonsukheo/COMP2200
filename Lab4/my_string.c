@@ -4,8 +4,6 @@ static char* ptr = NULL;
 
 size_t strlen(const char* str)
 {
-    /* return string length */
-    
     const char* p = str;
     
     while (*p != '\0') {
