@@ -1,5 +1,7 @@
 #include "my_string.h"
 
+static char* ptr = NULL;
+
 size_t strlen(const char* str)
 {
     /* return string length */
@@ -13,7 +15,7 @@ size_t strlen(const char* str)
     return (size_t)(p - str);
 }
 
-char* strsubstr(char* str, const char* substr)
+char* strsubstr(const char* str, const char* substr)
 {
     /* return * of string where substring found */
 
@@ -26,20 +28,18 @@ char* strsubstr(char* str, const char* substr)
         return NULL;
     }
     
-    for (i = 0; i < len_str - len_sub; i++) {
+    for (i = 0; i <= len_str - len_sub; i++) {
         for (j = 0; j < len_sub; j++) {
-            if (str[i + j] != str[j]) {
+            if (str[i + j] != substr[j]) {
                 break;
             }
-            if (j == len_sub) {
-                return str[i];
+            if (j == len_sub - 1) {
+                return (char*)&str[i];
             }
         }
     }    
     
-    if (i == len_str - len_sub) {
-        return NULL;
-    }        
+    return NULL;
 }
 
 void reverse(char* str)
@@ -77,7 +77,7 @@ void reverse_by_words(char* str)
     size_t count = 0;
     char* p = str;
  
-    for (i = 0; i < strlen(str); i++) {
+    for (i = 0; i <= strlen(str); i++) {
         count ++;
         
         if (*(str + i) == ' ') {
@@ -100,7 +100,7 @@ char* tokenize(char* str_or_null, const char* delims)
 {
     size_t i;
     size_t j;
-    static char* ptr = NULL;
+
     size_t len_del = strlen(delims);
     size_t len_str;
     
@@ -135,7 +135,6 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
 {
     size_t i;
     size_t j;
-    static char* ptr = NULL;
     size_t len_del = strlen(delims);
     size_t len_str;
     
