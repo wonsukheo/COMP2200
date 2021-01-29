@@ -1,16 +1,18 @@
 #include "my_string.h"
 
+#define NULL ((void*)0)
+
 static char* ptr = NULL;
 
-size_t strlen(const char* string)
+size_t strlen(const char* str)
 {
-    const char* p = string;
+    const char* p = str;
     
     while (*p != '\0') {
         p++;
     }
     
-    return (size_t)(p - string);
+    return (size_t)(p - str);
 }
 
 char* strsubstr(const char* str, const char* substr)
