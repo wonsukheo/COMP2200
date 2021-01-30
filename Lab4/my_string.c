@@ -4,7 +4,7 @@
 
 static char* ptr = NULL;
 
-size_t strlen(const char* str)
+size_t strlenth(const char* str)
 {
     const char* p = str;
     
@@ -15,14 +15,14 @@ size_t strlen(const char* str)
     return (size_t)(p - str);
 }
 
-char* strsubstr(const char* str, const char* substr)
+const char* strsubstr(const char* str, const char* substr)
 {
     /* return * of string where substring found */
 
     size_t i;
     size_t j;
-    size_t len_str = strlen(str);
-    size_t len_sub = strlen(substr);
+    size_t len_str = strlenth(str);
+    size_t len_sub = strlenth(substr);
 
     if (len_sub > len_str) {
         return NULL;
@@ -34,7 +34,7 @@ char* strsubstr(const char* str, const char* substr)
                 break;
             }
             if (j == len_sub - 1) {
-                return (char*)&str[i];
+                return &str[i];
             }
         }
     }    
@@ -48,7 +48,7 @@ void reverse(char* str)
    
     size_t i;
 
-    size_t len = strlen(str);
+    size_t len = strlenth(str);
     char* temp = str + len - 1;
     
     for (i = 0; i < len / 2; ++i) {
@@ -62,7 +62,7 @@ int index_of(const char* str, const char* word)
 {
     /* return first index of word, -1 if not found */
     
-    char* p = strsubstr(str, word);
+    const char* p = strsubstr(str, word);
     
     if (p == NULL) { 
         return -1;
@@ -77,7 +77,7 @@ void reverse_by_words(char* str)
     size_t count = 0;
     char* p = str;
  
-    for (i = 0; i <= strlen(str); i++) {
+    for (i = 0; i <= strlenth(str); i++) {
         count ++;
         
         if (*(str + i) == ' ') {
@@ -101,7 +101,7 @@ char* tokenize(char* str_or_null, const char* delims)
     size_t i;
     size_t j;
 
-    size_t len_del = strlen(delims);
+    size_t len_del = strlenth(delims);
     size_t len_str;
     
     if (ptr == NULL && str_or_null == NULL) {
@@ -112,7 +112,7 @@ char* tokenize(char* str_or_null, const char* delims)
     }
     
     ptr = str_or_null;
-    len_str = strlen(str_or_null);
+    len_str = strlenth(str_or_null);
     
     for (i = 1; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
@@ -135,7 +135,7 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
 {
     size_t i;
     size_t j;
-    size_t len_del = strlen(delims);
+    size_t len_del = strlenth(delims);
     size_t len_str;
     
     if (ptr == NULL && str_or_null == NULL) {
@@ -146,7 +146,7 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     }
     
     ptr = str_or_null;
-    len_str = strlen(str_or_null);
+    len_str = strlenth(str_or_null);
     
     for (i = 1; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
