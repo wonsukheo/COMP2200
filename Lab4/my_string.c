@@ -152,9 +152,8 @@ char* tokenize(char* str_or_null, const char* delims)
                 return str_or_null;
             }
             if (str_or_null[i] == '\0') {
-               s_ptr = NULL;
-               reverse(str_or_null);
-               return str_or_null;
+                s_ptr = NULL;
+                return str_or_null;
             }
         }    
     }   
@@ -210,9 +209,9 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
                 return str_or_null;
             }
             if (str_or_null[i] == '\0') {
-               s_ptr = NULL;
-               reverse(str_or_null);
-               return str_or_null;
+                s_ptr = NULL;
+                reverse(str_or_null);
+                return str_or_null;
             }
         }    
     }   
