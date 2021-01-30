@@ -163,10 +163,6 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     size_t len_del = strlenth(delims);
     size_t len_str;
 
-    if (*s_ptr == '\0') {
-        return NULL;
-    }
-    
     if (s_ptr == NULL && str_or_null == NULL) {
         return NULL;
     }
@@ -174,6 +170,10 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
         str_or_null = s_ptr;
     }
 
+    if (*str_or_null == '\0') {
+        return NULL;
+    }
+    
     len_str = strlenth(str_or_null);
     
     /* check consecutive delims */
@@ -199,7 +199,8 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
                 str_or_null[i] = '\0';
                 s_ptr = s_ptr + i + 1;
                 reverse_by_words(str_or_null);
-	        return str_or_null;
+	     
+                return str_or_null;
             }
           
             if (str_or_null[i] == '\0') {
