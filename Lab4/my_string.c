@@ -64,7 +64,7 @@ int index_of(const char* str, const char* word)
     const char* p = NULL;
 
     if (*word == 0) {
-        return -1;
+        return 0;
     }
 
     p = strsubstr(str, word);
