@@ -2,7 +2,7 @@
 
 #define NULL ((void*)0)
 
-static char* ptr = NULL;
+static char* s_ptr = NULL;
 
 size_t strlenth(const char* str)
 {
@@ -61,8 +61,13 @@ void reverse(char* str)
 int index_of(const char* str, const char* word)
 {
     /* return first index of word, -1 if not found */
-    
-    const char* p = strsubstr(str, word);
+    const char* p = NULL;
+
+    if (*word == 0) {
+        return -1;
+    }
+
+    p = strsubstr(str, word);
     
     if (p == NULL) { 
         return -1;
@@ -78,7 +83,7 @@ void reverse_by_words(char* str)
     char* p = str;
  
     for (i = 0; i <= strlenth(str); i++) {
-        count ++;
+        count++;
         
         if (*(str + i) == ' ') {
             *(str + i) = '\0';
@@ -100,30 +105,50 @@ char* tokenize(char* str_or_null, const char* delims)
 {
     size_t i;
     size_t j;
-
     size_t len_del = strlenth(delims);
     size_t len_str;
     
-    if (ptr == NULL && str_or_null == NULL) {
+    if (*s_ptr == '\0') {
         return NULL;
     }
+
     if (str_or_null == NULL) {
-        str_or_null = ptr;
+        str_or_null = s_ptr;
     }
     
-    ptr = str_or_null;
+    if (s_ptr == NULL && str_or_null == NULL) {
+        return NULL;
+    }
+
     len_str = strlenth(str_or_null);
     
-    for (i = 1; i <= len_str; i++) {
+    /* check consecutive delims */
+    for (i = 0; i < len_str; i++) {
+        for (j = 0; i < len_del; i++) {
+            if (*str_or_null == delims[j]) {
+                *str_or_null = '\0';
+                str_or_null++;
+            } 
+            if (*str_or_null != delims[j]) {
+                i = len_str;
+                break;
+            }
+        }
+    }
+
+    s_ptr = str_or_null;
+    len_str = strlenth(str_or_null);
+    
+    for (i = 0; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
             if (str_or_null[i] == delims[j]) {
                 str_or_null[i] = '\0';
-                ptr = ptr + i + 1;
+                s_ptr = s_ptr + i + 1;
                 return str_or_null;
             }
           
             if (str_or_null[i] == '\0') {
-                ptr = NULL;
+                s_ptr = NULL;
                 return str_or_null;
             }
         }    
@@ -137,30 +162,50 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     size_t j;
     size_t len_del = strlenth(delims);
     size_t len_str;
+
+    if (*s_ptr == '\0') {
+        return NULL;
+    }
     
-    if (ptr == NULL && str_or_null == NULL) {
+    if (s_ptr == NULL && str_or_null == NULL) {
         return NULL;
     }
     if (str_or_null == NULL) {
-        str_or_null = ptr;
+        str_or_null = s_ptr;
     }
-    
-    ptr = str_or_null;
+
     len_str = strlenth(str_or_null);
     
-    for (i = 1; i <= len_str; i++) {
+    /* check consecutive delims */
+    for (i = 0; i < len_str; i++) {
+        for (j = 0; i < len_del; i++) {
+            if (*str_or_null == delims[j]) {
+                *str_or_null = '\0';
+                str_or_null++;
+            } 
+            if (*str_or_null != delims[j]) {
+                i = len_str;
+                break;
+            }
+        }
+    }
+
+    s_ptr = str_or_null;
+    len_str = strlenth(str_or_null);
+    
+    for (i = 0; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
             if (str_or_null[i] == delims[j]) {
                 str_or_null[i] = '\0';
-                ptr = ptr + i + 1;
+                s_ptr = s_ptr + i + 1;
                 reverse_by_words(str_or_null);
-		return str_or_null;
+	        return str_or_null;
             }
           
             if (str_or_null[i] == '\0') {
-                ptr = NULL;
+                s_ptr = NULL;
                 reverse_by_words(str_or_null);
-		return str_or_null;
+                return str_or_null;
             }
         }    
     }
