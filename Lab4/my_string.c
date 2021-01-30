@@ -8,6 +8,10 @@ size_t strlenth(const char* str)
 {
     const char* p = str;
     
+    if (str == NULL) {
+        return 0;
+    }
+
     while (*p != '\0') {
         p++;
     }
@@ -114,8 +118,13 @@ char* tokenize(char* str_or_null, const char* delims)
     } else {
         s_ptr = str_or_null;
     }
+
+    if (str_or_null == NULL && s_ptr == NULL) {
+        return NULL;
+    }
     
     len_str = strlenth(str_or_null);
+
     /* check consecutive delims at start */
     for (i = 0; i < len_str; i++) {
         swetch = 1;
@@ -142,6 +151,11 @@ char* tokenize(char* str_or_null, const char* delims)
                 s_ptr = s_ptr + i + 1;
                 return str_or_null;
             }
+            if (str_or_null[i] == '\0') {
+               s_ptr = NULL;
+               reverse(str_or_null);
+               return str_or_null;
+            }
         }    
     }   
     
@@ -154,12 +168,16 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     size_t j;
     size_t len_del = strlenth(delims);
     size_t len_str;
-    int swetch = 0;
+    int swetch = 1;
     
     if (str_or_null == NULL) {
         str_or_null = s_ptr;
     } else {
         s_ptr = str_or_null;
+    }
+   
+    if (str_or_null == NULL && s_ptr == NULL) {
+        return NULL;
     }
 
     len_str = strlenth(str_or_null);
@@ -190,6 +208,11 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
                 s_ptr = s_ptr + i + 1;
                 reverse(str_or_null);
                 return str_or_null;
+            }
+            if (str_or_null[i] == '\0') {
+               s_ptr = NULL;
+               reverse(str_or_null);
+               return str_or_null;
             }
         }    
     }   
