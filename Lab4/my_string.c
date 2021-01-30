@@ -101,44 +101,40 @@ void reverse_by_words(char* str)
     }    
 } 
 
-char* tokenize(char* str_or_null, const char* delims) 
+char* tokenize(char* str_or_null, const char* delims)
 {
     size_t i;
     size_t j;
     size_t len_del = strlenth(delims);
     size_t len_str;
-    
-    if (*s_ptr == '\0') {
-        return NULL;
-    }
+    int swetch = 0;
 
     if (str_or_null == NULL) {
         str_or_null = s_ptr;
+    } else {
+        s_ptr = str_or_null;
     }
     
-    if (s_ptr == NULL && str_or_null == NULL) {
-        return NULL;
-    }
-
     len_str = strlenth(str_or_null);
-    
-    /* check consecutive delims */
+    /* check consecutive delims at start */
     for (i = 0; i < len_str; i++) {
-        for (j = 0; i < len_del; i++) {
+        for (j = 0; j < len_del; j++) {
             if (*str_or_null == delims[j]) {
                 *str_or_null = '\0';
                 str_or_null++;
-            } 
-            if (*str_or_null != delims[j]) {
-                i = len_str;
+                s_ptr++;
+            } else {
+                swetch = 1;
                 break;
             }
         }
+        if (swetch) {
+            break;
+        }
     }
-
-    s_ptr = str_or_null;
-    len_str = strlenth(str_or_null);
     
+    len_str = strlenth(str_or_null);
+ 
     for (i = 0; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
             if (str_or_null[i] == delims[j]) {
@@ -146,13 +142,9 @@ char* tokenize(char* str_or_null, const char* delims)
                 s_ptr = s_ptr + i + 1;
                 return str_or_null;
             }
-          
-            if (str_or_null[i] == '\0') {
-                s_ptr = NULL;
-                return str_or_null;
-            }
         }    
-    }
+    }   
+    
     return NULL;
 }
 
@@ -162,53 +154,45 @@ char* reverse_tokenize(char* str_or_null, const char* delims)
     size_t j;
     size_t len_del = strlenth(delims);
     size_t len_str;
-
-    if (s_ptr == NULL && str_or_null == NULL) {
-        return NULL;
-    }
+    int swetch = 0;
+    
     if (str_or_null == NULL) {
         str_or_null = s_ptr;
+    } else {
+        s_ptr = str_or_null;
     }
 
-    if (*str_or_null == '\0') {
-        return NULL;
-    }
-    
     len_str = strlenth(str_or_null);
     
-    /* check consecutive delims */
+    /* check consecutive delims at start */
     for (i = 0; i < len_str; i++) {
-        for (j = 0; i < len_del; i++) {
+        for (j = 0; j < len_del; j++) {
             if (*str_or_null == delims[j]) {
                 *str_or_null = '\0';
                 str_or_null++;
-            } 
-            if (*str_or_null != delims[j]) {
-                i = len_str;
+                s_ptr++;
+            } else {
+                swetch = 1;
                 break;
             }
         }
+        if (swetch) {
+            break;
+        }
     }
-
-    s_ptr = str_or_null;
-    len_str = strlenth(str_or_null);
     
+    len_str = strlenth(str_or_null);
+
     for (i = 0; i <= len_str; i++) {
         for (j = 0; j < len_del; j++) {
             if (str_or_null[i] == delims[j]) {
                 str_or_null[i] = '\0';
                 s_ptr = s_ptr + i + 1;
-                reverse_by_words(str_or_null);
-	     
-                return str_or_null;
-            }
-          
-            if (str_or_null[i] == '\0') {
-                s_ptr = NULL;
-                reverse_by_words(str_or_null);
+                reverse(str_or_null);
                 return str_or_null;
             }
         }    
-    }
+    }   
+    
     return NULL;
 }
