@@ -12,9 +12,11 @@ void set_total(void);
 
 void set_message(const char* message);
 
+void set_heading(time_t timestamp);
+
 void set_ending(void);
 
-void set_heading(time_t timestamp);
+void reset_receipt(void);
 
 int print_receipt(const char* filename, time_t timestamp);
 
