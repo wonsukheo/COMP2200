@@ -34,7 +34,7 @@ int add_item(const char* name, double price)
         return FALSE;
     }
 
-    printed_item = sprintf(item_buffer_ptr, "%33s %16.2f\n", name, price);
+    printed_item = sprintf(item_buffer_ptr, "%33.25s %16.2f\n", name, price);
 
     if (printed_item < 0) {
         return FALSE;
@@ -75,12 +75,21 @@ void set_total(void)
 
 void set_message(const char* message)
 {
-    sprintf(message_buffer_ptr, "%-s\n", message);
-    message_buffer_ptr += strlen(message) + 1;
-
-    if (strlen(message) > RECEIPT_WIDTH - 1) {
-        sprintf(message_buffer_ptr, "%-25s\n", message + RECEIPT_WIDTH - 1);
+    if (strlen(message) >= 75) {
+        sprintf(message_buffer_ptr, "%.50s\n", message);
+        message_buffer_ptr += RECEIPT_WIDTH;
+    
+        sprintf(message_buffer_ptr, "%-.25s\n", message + RECEIPT_WIDTH - 1);
         message_buffer_ptr += 26;
+    } else if (strlen(message) > RECEIPT_WIDTH - 1 && strlen(message) < 75) {
+        sprintf(message_buffer_ptr, "%.50s\n", message);
+        message_buffer_ptr += RECEIPT_WIDTH;
+        
+        sprintf(message_buffer_ptr, "%-.25s\n", message + RECEIPT_WIDTH - 1);
+        message_buffer_ptr += strlen(message) - 49;
+    } else {
+        sprintf(message_buffer_ptr, "%-s\n", message);
+        message_buffer_ptr += strlen(message) + 1;
     }
 }
 
@@ -150,6 +159,7 @@ int print_receipt(const char* filename, time_t timestamp)
         item_buffer_ptr = item_buffer;
         total_buffer_ptr = total_buffer;
         message_buffer_ptr = message_buffer;
+        *message_buffer_ptr = '0';
         ending_buffer_ptr = ending_buffer;
         tip_buffer_ptr = tip_buffer;
         
@@ -174,6 +184,7 @@ int print_receipt(const char* filename, time_t timestamp)
     item_buffer_ptr = item_buffer;
     total_buffer_ptr = total_buffer;
     message_buffer_ptr = message_buffer;
+    *message_buffer_ptr = '0';
     ending_buffer_ptr = ending_buffer;
     tip_buffer_ptr = tip_buffer;
 
