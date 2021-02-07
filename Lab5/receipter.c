@@ -57,7 +57,7 @@ void set_total(void)
     double tax = (subtotal * .05) + 0.005;
 
     sprintf(total_buffer_ptr, "%s", "\n");
-    total_buffer_ptr ++;
+    total_buffer_ptr++;
     sprintf(total_buffer_ptr, "%33s %16.2f\n", "Subtotal", subtotal);
     total_buffer_ptr += RECEIPT_WIDTH;
 
@@ -112,7 +112,12 @@ void set_heading(time_t timestamp)
 {
     size_t i;
     char time_string[48];
-    int hours, minutes, seconds, day, month, year;
+    int hours;
+    int minutes;
+    int seconds;
+    int day;
+    int month;
+    int year;
     char name_restaurant[] = "Charles' Seafood";
 
     struct tm* gm = gmtime(&timestamp);
