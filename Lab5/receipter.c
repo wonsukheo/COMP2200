@@ -141,7 +141,7 @@ void set_heading(time_t timestamp)
     s_heading_buffer_ptr += strlen(name_restaurant) + 1;
     sprintf(s_heading_buffer_ptr, "%50s\n", s_spacing);
     s_heading_buffer_ptr += RECEIPT_WIDTH;
-    sprintf(s_heading_buffer_ptr, "%-44s %05d\n", time_string, order_number);
+    sprintf(s_heading_buffer_ptr, "%-44s %05d\n", time_string, s_order_number);
     s_heading_buffer_ptr += RECEIPT_WIDTH;
     sprintf(s_heading_buffer_ptr, "%50s\n", s_spacing);
     s_heading_buffer_ptr += RECEIPT_WIDTH;
@@ -183,7 +183,7 @@ int print_receipt(const char* filename, time_t timestamp)
     fflush(stream);
     fclose(stream);
 
-    order_number++;
+    s_order_number++;
     reset_receipt();
 
     return 1;
