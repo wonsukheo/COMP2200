@@ -122,13 +122,13 @@ void set_heading(time_t timestamp)
 
     struct tm* gm = gmtime(&timestamp);
 
-    hours = gm -> tm_hour;
-    minutes = gm -> tm_min;
-    seconds = gm -> tm_sec;
+    hours = gm->tm_hour;
+    minutes = gm->tm_min;
+    seconds = gm->tm_sec;
 
-    day = gm -> tm_mday;
-    month = gm -> tm_mon + 1;
-    year = gm -> tm_year + 1900;
+    day = gm->tm_mday;
+    month = gm->tm_mon + 1;
+    year = gm->tm_year + 1900;
 
     sprintf(time_string, "%d-%02d-%02d %02d:%02d:%02d", year, month, day, hours, minutes, seconds);
 
