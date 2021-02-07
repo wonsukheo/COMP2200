@@ -24,6 +24,7 @@ char* ending_buffer_ptr = ending_buffer;
 size_t item_count = 0u;
 double subtotal = 0.00;
 size_t order_number = 0u;
+double g_tip;
 
 int add_item(const char* name, double price)
 { 
@@ -47,45 +48,35 @@ int add_item(const char* name, double price)
 
 void set_tip(double tip)
 {
-    if (tip != 0.00) {
-        sprintf(tip_buffer_ptr, "%33s %16.2f\n", "Tip", tip);
-        subtotal += tip;
-    } else {
-        tip_buffer_ptr = NULL;
-    }
+    sprintf(tip_buffer_ptr, "%33s %16.2f\n", "Tip", tip);
+    g_tip = tip;
 }
 
 void set_total(void)
 {
-    size_t i;
     double tax = (subtotal * .05) + 0.005;
 
-    for (i = 0; i < RECEIPT_WIDTH - 1; ++i) {
-        g_spacing[i] = ' ';
-    }
-    g_spacing[i] = '\0';
-
-    sprintf(total_buffer_ptr, "%50s\n", g_spacing);
-    total_buffer_ptr += RECEIPT_WIDTH;
+    sprintf(total_buffer_ptr, "%s", "\n");
+    total_buffer_ptr ++;
     sprintf(total_buffer_ptr, "%33s %16.2f\n", "Subtotal", subtotal);
     total_buffer_ptr += RECEIPT_WIDTH;
 
-    if (tip_buffer_ptr != NULL) {    
+    if (g_tip != 0.00) {    
         sprintf(total_buffer_ptr, "%50s\n", tip_buffer);
         total_buffer_ptr += RECEIPT_WIDTH;
     }
     sprintf(total_buffer_ptr, "%33s %16.2f\n", "Tax", tax);
     total_buffer_ptr += RECEIPT_WIDTH;
-    sprintf(total_buffer_ptr, "%33s %16.2f\n", "Total", subtotal + tax);
+    sprintf(total_buffer_ptr, "%33s %16.2f\n", "Total", subtotal + tax + g_tip);
     total_buffer_ptr += RECEIPT_WIDTH;
-    sprintf(total_buffer_ptr, "%50s\n", g_spacing);
-    total_buffer_ptr += RECEIPT_WIDTH;
+    sprintf(total_buffer_ptr, "%s", "\n");
+    total_buffer_ptr++;
 }
 
 void set_message(const char* message)
 {
-    sprintf(message_buffer_ptr, "%-50s\n", message);
-    message_buffer_ptr += RECEIPT_WIDTH;
+    sprintf(message_buffer_ptr, "%-s\n", message);
+    message_buffer_ptr += strlen(message) + 1;
 
     if (strlen(message) > RECEIPT_WIDTH - 1) {
         sprintf(message_buffer_ptr, "%-25s\n", message + RECEIPT_WIDTH - 1);
@@ -104,8 +95,8 @@ void set_ending(void)
 
     sprintf(ending_buffer_ptr, "%50s\n", g_spacing);
     ending_buffer_ptr += RECEIPT_WIDTH;
-    sprintf(ending_buffer_ptr, "%50s\n", "Tax#-51234");
-    ending_buffer_ptr += RECEIPT_WIDTH;
+    sprintf(ending_buffer_ptr, "%50s", "Tax#-51234");
+    ending_buffer_ptr += RECEIPT_WIDTH - 1;
 }
 
 void set_heading(time_t timestamp)
@@ -113,7 +104,8 @@ void set_heading(time_t timestamp)
     size_t i;
     char time_string[48];
     int hours, minutes, seconds, day, month, year;
-    
+    char name_restaurant[] = "Charles' Seafood";
+
     struct tm* gm = gmtime(&timestamp);
 
     hours = gm -> tm_hour;
@@ -130,9 +122,9 @@ void set_heading(time_t timestamp)
         g_spacing[i] = '-';
     }
     g_spacing[i] = '\0';
-
-    sprintf(heading_buffer_ptr, "%-50s\n", "Charles' Seafood");
-    heading_buffer_ptr += RECEIPT_WIDTH;
+    
+    sprintf(heading_buffer_ptr, "%-s\n", name_restaurant);
+    heading_buffer_ptr += strlen(name_restaurant) + 1;
     sprintf(heading_buffer_ptr, "%50s\n", g_spacing);
     heading_buffer_ptr += RECEIPT_WIDTH;
     sprintf(heading_buffer_ptr, "%-44s %05d\n", time_string, order_number);
@@ -150,9 +142,9 @@ int print_receipt(const char* filename, time_t timestamp)
     set_ending();
     
     if (item_buffer == item_buffer_ptr) {
-        order_number++;
         item_count = 0u;
         subtotal = 0.00;
+        g_tip = 0.00;
 
         heading_buffer_ptr = heading_buffer;
         item_buffer_ptr = item_buffer;
@@ -173,10 +165,10 @@ int print_receipt(const char* filename, time_t timestamp)
     fflush(stream);
     fclose(stream);
 
-    
     order_number++;
     item_count = 0u;
     subtotal = 0.00;
+    g_tip = 0.00;
 
     heading_buffer_ptr = heading_buffer;
     item_buffer_ptr = item_buffer;
