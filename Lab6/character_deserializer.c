@@ -1,5 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <string.h>
 
@@ -10,8 +8,7 @@
 char* get_stat(char* stat_name, char* character_stat[], int version)
 { 
     size_t i = 0;
-    const char* character_stat_ptr = character_stat[0];
-    
+
     switch (version) {
     case 1:
         while (strcmp(stat_name, character_stat[i++]) != 0) {
