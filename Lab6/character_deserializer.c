@@ -84,13 +84,13 @@ int get_character(const char* filename, character_v3_t* out_character)
             stat_tokenized[++i] = strtok(NULL, delims);
         }
         
-        sscanf("player_", "%s", &(out_character->name));
+        sscanf("player_", "%s", out_character->name);
         stat_info = get_stat("id", stat_tokenized, version);
         strcat(out_character->name, stat_info);
         
         stat_info = get_stat("lvl", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
-        
+        printf("%d", out_character->level);
         stat_info = get_stat("hp", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->health));
 
@@ -125,7 +125,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         }
 
         stat_info = get_stat("name", stat_tokenized, version);
-        sscanf(stat_info, "%s", &(out_character->name));
+        
+        sscanf(stat_info, "%s", out_character->name);
 
         stat_info = get_stat("level", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
@@ -170,7 +171,7 @@ int get_character(const char* filename, character_v3_t* out_character)
             stat_tokenized[++i] = strtok(NULL, delims);
         }
 
-        sscanf(stat_tokenized[14], "%s", &(out_character->name));
+        sscanf(stat_tokenized[14], "%s", out_character->name);
         sscanf(stat_tokenized[15], "%d", &(out_character->level));
         sscanf(stat_tokenized[16], "%d", &(out_character->health));
         sscanf(stat_tokenized[17], "%d", &(out_character->mana));
@@ -188,7 +189,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         if (*stat_tokenized[27] != 0) {
             size_t j = 32;
             for (i = 0; i < out_character->minion_count; ++i) {
-                sscanf(stat_tokenized[j++], "%s", &(out_character->minions[i].name));
+                sscanf(stat_tokenized[j++], "%s", out_character->minions[i].name);
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].health));
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].strength));
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].defence));

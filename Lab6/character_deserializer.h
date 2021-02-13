@@ -1,11 +1,11 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
-#define NAME_LENGTH (50)
+
 #define MINION_LIMIT (3)
 
 typedef struct {
-    char name[NAME_LENGTH];
+    char name[50];
     unsigned int health;
     unsigned int strength;
     unsigned int defence;
@@ -18,7 +18,7 @@ typedef struct {
 } elemental_resistance_t;
 
 typedef struct {
-    char name[NAME_LENGTH];
+    char name[50];
     unsigned int level;
     unsigned int health;
     unsigned int mana;
