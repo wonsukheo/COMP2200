@@ -35,7 +35,7 @@ typedef struct {
 
 int get_character(const char*, character_v3_t*);
 
-char* get_stat(char*, char* [], int);
+char* get_stat(char*, char*[], int);
 
 void remove_whitespace(char*);
 

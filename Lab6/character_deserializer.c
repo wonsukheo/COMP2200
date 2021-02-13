@@ -14,17 +14,17 @@ char* get_stat(char* stat_name, char* character_stat[], int version)
         while (strcmp(stat_name, character_stat[i++]) != 0) {
         }
         return character_stat[i];
-	break;
+    break;
 
     case 2:
         while (strcmp(stat_name, character_stat[i++]) != 0) {
         }
         return character_stat[i + 9];
-	break;
+    break;
 
     default:
         return NULL;
-	break;
+    break;
     }
 }
 
@@ -84,8 +84,8 @@ int get_character(const char* filename, character_v3_t* out_character)
 
 
     switch (version) {
-    case 1: 
-    {
+    case 1: {
+        
         char delims[] = ",:";
 
         character_stat[i] = strtok(character_info, delims);
@@ -124,10 +124,10 @@ int get_character(const char* filename, character_v3_t* out_character)
         out_character->elemental_resistance.lightning = out_character->elemental_resistance.fire;
         out_character->leadership = out_character->level / 10;
         out_character->minion_count = 0;
-    }
+        }
         break;
-    case 2:
-    {
+    case 2: {
+        
         char delims[] = ",\n";
 
         character_stat[i] = strtok(character_info, delims);
@@ -170,10 +170,10 @@ int get_character(const char* filename, character_v3_t* out_character)
         out_character->elemental_resistance.lightning = out_character->elemental_resistance.fire;
         out_character->leadership = out_character->level / 10;
         out_character->minion_count = 0;
-    }
+        }
         break;
-    case 3:
-    {
+    case 3: {
+        
         char delims[] = "|\n";
 
         remove_whitespace(character_info);       
@@ -207,7 +207,7 @@ int get_character(const char* filename, character_v3_t* out_character)
                 sscanf(character_stat[j++], "%d", &(out_character->minions[i].defence));
             }
         }
-    }
+        }
         break;
     
     default:
