@@ -9,22 +9,14 @@ char* get_stat(char* stat_name, char* character_stat[], int version)
 { 
     size_t i = 0;
 
-    switch (version) {
-    case 1:
-        while (strcmp(stat_name, character_stat[i++]) != 0) {
+    while (strcmp(stat_name, character_stat[i++]) != 0) {
         }
-        return character_stat[i];
-    break;
-
-    case 2:
-        while (strcmp(stat_name, character_stat[i++]) != 0) {
-        }
+    if (version == 1) {
+        return character_stat[i]; 
+    } else if (version ==2) {
         return character_stat[i + 9];
-    break;
-
-    default:
+    } else {
         return NULL;
-    break;
     }
 }
 
@@ -38,7 +30,7 @@ void remove_whitespace(char* string)
     for (i = 0; i < length; ++i) {
         if (string[i] == ' ') {
             whitespace_start = &string[i];
-            j = i;
+            j = i + 1;
             while (string[j] == ' ') {
                 j++;
                 if (j == length - 1) {
@@ -58,15 +50,15 @@ int get_character(const char* filename, character_v3_t* out_character)
     size_t filelength;
     int version;
     size_t i;
-    char character_info[FILE_LENGTH];
-    char* character_info_ptr;
-    char* character_stat[100];
+    char character_stat[FILE_LENGTH];
+    char* character_stat_ptr;
+    char* stat_tokenized[100];
     char* stat_info;
 
-    character_info_ptr = character_info; 
+    character_stat_ptr = character_stat; 
     stream = fopen(filename, "r");
-    while (fgets(character_info_ptr, FILE_LENGTH, stream) != NULL) {
-        character_info_ptr += strlen(character_info_ptr);
+    while (fgets(character_stat_ptr, FILE_LENGTH, stream) != NULL) {
+        character_stat_ptr += strlen(character_stat_ptr);
     }
     fclose(stream);
     
@@ -80,42 +72,41 @@ int get_character(const char* filename, character_v3_t* out_character)
         version = 3;
     }
     
-    i = 0;
-
+    /* insert character stat */
 
     switch (version) {
     case 1: {
-        
         char delims[] = ",:";
-
-        character_stat[i] = strtok(character_info, delims);
-        while (character_stat[i] != NULL) {
-            character_stat[++i] = strtok(NULL, delims);
+        i = 0;
+        
+        stat_tokenized[i] = strtok(character_stat, delims);
+        while (stat_tokenized[i] != NULL) {
+            stat_tokenized[++i] = strtok(NULL, delims);
         }
-
-        stat_info = get_stat("id", character_stat, version);
+        
         sscanf("player_", "%s", &(out_character->name));
+        stat_info = get_stat("id", stat_tokenized, version);
         strcat(out_character->name, stat_info);
         
-        stat_info = get_stat("lvl", character_stat, version);
+        stat_info = get_stat("lvl", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
         
-        stat_info = get_stat("hp", character_stat, version);
+        stat_info = get_stat("hp", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->health));
 
-        stat_info = get_stat("mp", character_stat, version);
+        stat_info = get_stat("mp", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->mana));
 
-        stat_info = get_stat("str", character_stat, version);
+        stat_info = get_stat("str", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->strength));
 
-        stat_info = get_stat("dex", character_stat, version);
+        stat_info = get_stat("dex", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->dexterity));
 
-        stat_info = get_stat("intel", character_stat, version);
+        stat_info = get_stat("intel", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->intelligence));
 
-        stat_info = get_stat("def", character_stat, version);
+        stat_info = get_stat("def", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->armour));
 
         out_character->evasion = out_character->dexterity / 2;
@@ -124,45 +115,43 @@ int get_character(const char* filename, character_v3_t* out_character)
         out_character->elemental_resistance.lightning = out_character->elemental_resistance.fire;
         out_character->leadership = out_character->level / 10;
         out_character->minion_count = 0;
-        }
-        break;
+    } break;
     case 2: {
-        
         char delims[] = ",\n";
-
-        character_stat[i] = strtok(character_info, delims);
-        while (character_stat[i] != NULL) {
-            character_stat[++i] = strtok(NULL, delims);
+        i = 0;
+        stat_tokenized[i] = strtok(character_stat, delims);
+        while (stat_tokenized[i] != NULL) {
+            stat_tokenized[++i] = strtok(NULL, delims);
         }
 
-        stat_info = get_stat("name", character_stat, version);
+        stat_info = get_stat("name", stat_tokenized, version);
         sscanf(stat_info, "%s", &(out_character->name));
 
-        stat_info = get_stat("level", character_stat, version);
+        stat_info = get_stat("level", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
         
-        stat_info = get_stat("health", character_stat, version);
+        stat_info = get_stat("health", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->health));
 
-        stat_info = get_stat("mana", character_stat, version);
+        stat_info = get_stat("mana", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->mana));
 
-        stat_info = get_stat("strength", character_stat, version);
+        stat_info = get_stat("strength", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->strength));
 
-        stat_info = get_stat("dexterity", character_stat, version);
+        stat_info = get_stat("dexterity", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->dexterity));
 
-        stat_info = get_stat("intelligence", character_stat, version);
+        stat_info = get_stat("intelligence", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->intelligence));
 
-        stat_info = get_stat("armour", character_stat, version);
+        stat_info = get_stat("armour", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->armour));
 
-        stat_info = get_stat("evasion", character_stat, version);
+        stat_info = get_stat("evasion", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->evasion));
         
-        stat_info = get_stat("magic_resistance", character_stat, version);
+        stat_info = get_stat("magic_resistance", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->elemental_resistance.fire));
        
         out_character->elemental_resistance.fire /= 3;
@@ -170,45 +159,42 @@ int get_character(const char* filename, character_v3_t* out_character)
         out_character->elemental_resistance.lightning = out_character->elemental_resistance.fire;
         out_character->leadership = out_character->level / 10;
         out_character->minion_count = 0;
-        }
-        break;
+    } break;
     case 3: {
-        
         char delims[] = "|\n";
-
-        remove_whitespace(character_info);       
-        character_stat[i] = strtok(character_info, delims);
+        i = 0;
+        remove_whitespace(character_stat);       
         
-        while (character_stat[i] != NULL) {
-            character_stat[++i] = strtok(NULL, delims);
+        stat_tokenized[i] = strtok(character_stat, delims);
+        while (stat_tokenized[i] != NULL) {
+            stat_tokenized[++i] = strtok(NULL, delims);
         }
 
-        sscanf(character_stat[14], "%s", &(out_character->name));
-        sscanf(character_stat[15], "%d", &(out_character->level));
-        sscanf(character_stat[16], "%d", &(out_character->health));
-        sscanf(character_stat[17], "%d", &(out_character->mana));
-        sscanf(character_stat[18], "%d", &(out_character->strength));
-        sscanf(character_stat[19], "%d", &(out_character->dexterity));
-        sscanf(character_stat[20], "%d", &(out_character->intelligence));
-        sscanf(character_stat[21], "%d", &(out_character->armour));
-        sscanf(character_stat[22], "%d", &(out_character->evasion));
-        sscanf(character_stat[23], "%d", &(out_character->elemental_resistance.fire));
-        sscanf(character_stat[24], "%d", &(out_character->elemental_resistance.cold));
-        sscanf(character_stat[25], "%d", &(out_character->elemental_resistance.lightning));
-        sscanf(character_stat[26], "%d", &(out_character->leadership));
-        sscanf(character_stat[27], "%d", &(out_character->minion_count));
+        sscanf(stat_tokenized[14], "%s", &(out_character->name));
+        sscanf(stat_tokenized[15], "%d", &(out_character->level));
+        sscanf(stat_tokenized[16], "%d", &(out_character->health));
+        sscanf(stat_tokenized[17], "%d", &(out_character->mana));
+        sscanf(stat_tokenized[18], "%d", &(out_character->strength));
+        sscanf(stat_tokenized[19], "%d", &(out_character->dexterity));
+        sscanf(stat_tokenized[20], "%d", &(out_character->intelligence));
+        sscanf(stat_tokenized[21], "%d", &(out_character->armour));
+        sscanf(stat_tokenized[22], "%d", &(out_character->evasion));
+        sscanf(stat_tokenized[23], "%d", &(out_character->elemental_resistance.fire));
+        sscanf(stat_tokenized[24], "%d", &(out_character->elemental_resistance.cold));
+        sscanf(stat_tokenized[25], "%d", &(out_character->elemental_resistance.lightning));
+        sscanf(stat_tokenized[26], "%d", &(out_character->leadership));
+        sscanf(stat_tokenized[27], "%d", &(out_character->minion_count));
 
-        if (*character_stat[27] != 0) {
+        if (*stat_tokenized[27] != 0) {
             size_t j = 32;
             for (i = 0; i < out_character->minion_count; ++i) {
-                sscanf(character_stat[j++], "%s", &(out_character->minions[i].name));
-                sscanf(character_stat[j++], "%d", &(out_character->minions[i].health));
-                sscanf(character_stat[j++], "%d", &(out_character->minions[i].strength));
-                sscanf(character_stat[j++], "%d", &(out_character->minions[i].defence));
+                sscanf(stat_tokenized[j++], "%s", &(out_character->minions[i].name));
+                sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].health));
+                sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].strength));
+                sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].defence));
             }
         }
-        }
-        break;
+    } break;
     
     default:
         break;
