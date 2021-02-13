@@ -35,8 +35,8 @@ typedef struct {
 
 int get_character(const char* filename, character_v3_t* out_character);
 
-char* get_stat(char*, char*[], int);
+char* get_stat(char* stat, char* stat_tokenized[], int version);
 
-void remove_whitespace(char*);
+void remove_whitespace(char* character_stat);
 
 #endif /* CHARACTER_DESERIALIZER_H */
