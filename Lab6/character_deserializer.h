@@ -4,7 +4,7 @@
 #define MINION_LIMIT (3)
 
 typedef struct {
-    char name[50];
+    char name[51];
     unsigned int health;
     unsigned int strength;
     unsigned int defence;
@@ -17,7 +17,7 @@ typedef struct {
 } elemental_resistance_t;
 
 typedef struct {
-    char name[50];
+    char name[51];
     unsigned int level;
     unsigned int health;
     unsigned int mana;
