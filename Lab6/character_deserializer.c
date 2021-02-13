@@ -1,3 +1,4 @@
+#pragma warning(disable : 4996)
 #include <stdio.h>
 #include <string.h>
 
@@ -84,7 +85,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         
         sscanf("player_", "%s", out_character->name);
         stat_info = get_stat("id", stat_tokenized, version);
-        strcat(out_character->name, stat_info);
+        strncpy(&(out_character->name[7]), stat_info, 42);
+        out_character->name[49] = '\0';
         
         stat_info = get_stat("lvl", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
@@ -121,9 +123,10 @@ int get_character(const char* filename, character_v3_t* out_character)
         while (stat_tokenized[i] != NULL) {
             stat_tokenized[++i] = strtok(NULL, delims);
         }
-
+        
         stat_info = get_stat("name", stat_tokenized, version);
-        sscanf(stat_info, "%s", out_character->name);
+        strncpy(out_character->name, stat_info, 50);
+        out_character->name[49] = '\0';
 
         stat_info = get_stat("level", stat_tokenized, version);
         sscanf(stat_info, "%d", &(out_character->level));
@@ -159,6 +162,7 @@ int get_character(const char* filename, character_v3_t* out_character)
         out_character->minion_count = 0;
     } break;
     case 3: {
+        size_t j = 32;
         char delims[] = "|\n";
         i = 0;
         remove_whitespace(character_stat);       
@@ -167,8 +171,8 @@ int get_character(const char* filename, character_v3_t* out_character)
         while (stat_tokenized[i] != NULL) {
             stat_tokenized[++i] = strtok(NULL, delims);
         }
-
-        sscanf(stat_tokenized[14], "%s", out_character->name);
+        strncpy(out_character->name, stat_tokenized[14], 50);
+        out_character->name[49] = '\0';
         sscanf(stat_tokenized[15], "%d", &(out_character->level));
         sscanf(stat_tokenized[16], "%d", &(out_character->health));
         sscanf(stat_tokenized[17], "%d", &(out_character->mana));
@@ -183,10 +187,12 @@ int get_character(const char* filename, character_v3_t* out_character)
         sscanf(stat_tokenized[26], "%d", &(out_character->leadership));
         sscanf(stat_tokenized[27], "%d", &(out_character->minion_count));
 
-            size_t j = 32;
         if (*stat_tokenized[27] != 0) {
             for (i = 0; i < out_character->minion_count; ++i) {
-                sscanf(stat_tokenized[j++], "%s", out_character->minions[i].name);
+                
+                strncpy(out_character->minions[i].name, stat_tokenized[j++], 50);
+                out_character->minions[i].name[49] = '\0';
+                
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].health));
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].strength));
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].defence));
