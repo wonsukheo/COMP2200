@@ -1,7 +1,6 @@
 #ifndef CHARACTER_DESERIALIZER_H
 #define CHARACTER_DESERIALIZER_H
 
-
 #define MINION_LIMIT (3)
 
 typedef struct {
