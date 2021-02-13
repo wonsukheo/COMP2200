@@ -52,7 +52,7 @@ int get_character(const char* filename, character_v3_t* out_character)
     size_t i;
     char character_stat[FILE_LENGTH];
     char* character_stat_ptr;
-    char* stat_tokenized[100];
+    char* stat_tokenized[200];
     char* stat_info;
 
     character_stat_ptr = character_stat; 

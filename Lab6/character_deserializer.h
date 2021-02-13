@@ -33,7 +33,7 @@ typedef struct {
     minion_t minions[MINION_LIMIT];
 } character_v3_t;
 
-int get_character(const char*, character_v3_t*);
+int get_character(const char* filename, character_v3_t* out_character);
 
 char* get_stat(char*, char*[], int);
 
