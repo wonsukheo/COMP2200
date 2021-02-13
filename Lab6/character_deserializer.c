@@ -194,7 +194,8 @@ int get_character(const char* filename, character_v3_t* out_character)
             size_t j = 32;
             for (i = 0; i < out_character->minion_count; ++i) {
                 strncpy(char_name, stat_tokenized[j++], 50);
-                
+                char_name[50] = '\0';
+               
                 sscanf(char_name, "%s", out_character->minions[i].name);
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].health));
                 sscanf(stat_tokenized[j++], "%d", &(out_character->minions[i].strength));
