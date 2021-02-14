@@ -1,4 +1,4 @@
-/* #define _CRT_SECURE_NO_WARNINGS */
+/*#define _CRT_SECURE_NO_WARNINGS */
 #include <stdio.h>
 #include <string.h>
 
@@ -9,7 +9,7 @@
 int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
 {   
     char escape_char_cmd[10] = { '\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"' };
-    char escape_char_c[10] = { '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'','\"' };
+    char escape_char_c[10] = { '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'', '\"' };
     size_t set1_length;
     size_t set2_length;
     size_t i;
@@ -58,7 +58,7 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                     strcpy(&set1[i + 1], &set1[i + 2]);
                     break;
                 } 
-        }   
+            }   
             if (j == 10) {
                 fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
                 return 3;    
@@ -74,7 +74,7 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                     strcpy(&set2[i + 1], &set2[i + 2]);
                     break;
                 } 
-	}   
+	    }   
             if (j == 10) {
                 fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
                 return 3;    
@@ -93,13 +93,11 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                     fprintf(stdout, "%s", "ERROR_CODE_INVALID_RANGE");
                     return 5;
                 }
-                
-		if (set1_length + difference_ascii - 2 > 511) {
+                if (set1_length + difference_ascii - 2 > 511) {
                     fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
                     return 4;
  	        }
-                
-		for (j = i; j < difference_ascii + i; ++j) {
+                for (j = i; j < difference_ascii + i; ++j) {
                     set1[j] = (char)((int)set1[j - 1] + 1);
                 }
                 
@@ -140,7 +138,7 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                 }
                 strcpy(&set2[i + difference_ascii], temp_array);
                 i += difference_ascii;
-                set1_length = strlen(set1);
+                set2_length = strlen(set1);
             }
             if (set2[i + 1] == '-' && set2[i + 2] == '-') {
 	        strcpy(&set2[i], &set2[i + 2]);
@@ -156,6 +154,8 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
     }
     
     /* extend set2_len */
+    set1_length = strlen(set1);
+    set2_length = strlen(set2);
     if (set1_length > set2_length) {
         size_t i;
         for (i = set2_length; i < set1_length; ++i) {
@@ -176,15 +176,16 @@ int translate(int argc, const char** argv)
     int count = 0;
     int flag = 0;
     int errormessage;
-    if (argv[1][0] == '-') {
-        if (argv[1][1] == 'i') {
-            flag = 1;
-        } else {
-            fprintf(stdout, "%s", "ERROR_CODE_INVALID_FLAG");
-            return 2;
+    if (argc == 4) {
+        if (argv[1][0] == '-') {
+            if (argv[1][1] == 'i') {
+                flag = 1;
+            } else {
+                fprintf(stdout, "%s", "ERROR_CODE_INVALID_FLAG");
+                return 2;
+            }
         }
-    }
-
+    } 
     switch (flag) {
     case 0: { 
         errormessage = do_magic(argc, set1, set2, argv, flag);
