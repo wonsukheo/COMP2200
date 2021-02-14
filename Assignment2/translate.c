@@ -7,8 +7,8 @@
 
 int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
 {   
-    char escape_char_cmd[10] = {'\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"'};
-    char escape_char_c[10] = {'\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'','\"'};
+    char escape_char_cmd[10] = { '\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"' };
+    char escape_char_c[10] = { '\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'','\"' };
     size_t set1_length;
     size_t set2_length;
     size_t i;
@@ -28,7 +28,11 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
             return 1;
         }
     } 
-    if (strlen(argv[1]) > LENGTH || strlen(argv[2]) > LENGTH) {
+    if (argc < 3) {
+        fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
+        return 1;
+    }
+    if (strlen(argv[1]) + 1> LENGTH || strlen(argv[2]) + 1 > LENGTH) {
         fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
         return 4;
     }     
@@ -42,18 +46,55 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                     strcpy(&set1[i + 1], &set1[i + 2]);
                     break;
                 } 
-	}   
+        }   
             if (j == 10) {
                 fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
                 return 3;    
             }
         }
     }
-  
+    for (i = 0; i < set2_length; ++i) {
+        if (set2[i] == '\\') {
+            for (j = 0; j < 10; ++j) {
+                if (set2[i + 1] == escape_char_cmd[j]) {
+                    set2[i] = escape_char_c[j];
+                        
+                    strcpy(&set2[i + 1], &set2[i + 2]);
+                    break;
+                } 
+	}   
+            if (j == 10) {
+                fprintf(stdout, "%s", "ERROR_CODE_INVALID_FORMAT");
+                return 3;    
+            }
+        }
+    }  
     /* char - char */
     for (i = 1; i < set1_length - 1; ++i) {
         if (set1[i] == '-') {
-  
+            if (set1[i - 1] != set1[i + 1]) {
+ 	        int difference_ascii = (int)set1[i + 1] - (int)set1[i - 1];	
+                char temp_array[511];          
+                strcpy(temp_array, &set1[i + 2]);            
+                
+                if (difference_ascii < 0) {
+                    fprintf(stdout, "%s", "ERROR_CODE_INVALID_RANGE");
+                    return 5;
+                }
+                
+		if (set1_length + difference_ascii - 2 > 511) {
+                    fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
+                    return 4;
+ 	        }
+                
+		for (j = i; j < difference_ascii + i; ++j) {
+                    set1[j] = (char)((int)set1[j - 1] + 1);
+                }
+                
+		strcpy(&set1[i + difference_ascii], temp_array);
+                i += difference_ascii;
+                set1_length = strlen(set1);
+            }
             if (set1[i + 1] == '-' && set1[i + 2] == '-') {
 	        strcpy(&set1[i], &set1[i + 2]);
                 set1[set1_length - 1] = '\0';
@@ -64,11 +105,15 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                 set1[set1_length - 1] = '\0';
                 set1[set1_length - 2] = '\0';            
             }
-            if (set1[i - 1] != set1[i + 1]) {
- 	        int difference_ascii = (int)set1[i + 1] - (int)set1[i - 1];	
+        }    
+    }    
+    for (i = 1; i < set2_length - 1; ++i) {
+        if (set2[i] == '-') {
+  	    if (set2[i - 1] != set2[i + 1]) {
+ 	        int difference_ascii = (int)set2[i + 1] - (int)set2[i - 1];	
                 char temp_array[511];
            
-                strcpy(temp_array, &set1[i + 2]);
+                strcpy(temp_array, &set2[i + 2]);
             
                 if (difference_ascii < 0) {
                     fprintf(stdout, "%s", "ERROR_CODE_INVALID_RANGE");
@@ -79,22 +124,32 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                     return 4;
  	        }
                 for (j = i; j < difference_ascii + i; ++j) {
-                    set1[j] = (char)((int)set1[j - 1] + 1);
+                    set2[j] = (char)((int)set2[j - 1] + 1);
                 }
-                strcpy(&set1[i + difference_ascii], temp_array);
+                strcpy(&set2[i + difference_ascii], temp_array);
                 i += difference_ascii;
                 set1_length = strlen(set1);
-                }
             }
+            if (set2[i + 1] == '-' && set2[i + 2] == '-') {
+	        strcpy(&set2[i], &set2[i + 2]);
+                set2[set2_length - 1] = '\0';
+                set2[set2_length - 2] = '\0';
+            }
+            if (set2[i - 1] == set2[i + 1]) {
+	        strcpy(&set2[i - 1], &set2[i + 1]);
+                set2[set2_length - 1] = '\0';
+                set2[set2_length - 2] = '\0';            
+            }           
         }
+    }
     
     /* extend set2_len */
     if (set1_length > set2_length) {
-         size_t i;
-         for (i = set2_length; i < set1_length; ++i) {
-             set2[i] = set2[i - 1];
-         }
-         set2[set1_length] = '\0';
+        size_t i;
+        for (i = set2_length; i < set1_length; ++i) {
+            set2[i] = set2[i - 1];
+        }
+        set2[set1_length] = '\0';
     }        
 
     return 0;  
@@ -110,7 +165,7 @@ int translate(int argc, const char** argv)
     int flag = 0;
     int errormessage;
     if (argv[1][0] == '-') {
-        if(argv[1][1] == 'i') {
+        if (argv[1][1] == 'i') {
             flag = 1;
         } else {
             fprintf(stdout, "%s", "ERROR_CODE_INVALID_FLAG");
@@ -138,7 +193,7 @@ int translate(int argc, const char** argv)
             count++;
             putchar(c);
         }
-	return errormessage;
+        return errormessage;
     } break;
 
     case 1: {
@@ -166,8 +221,9 @@ int translate(int argc, const char** argv)
         return errormessage;
     } break;
     
-    default : 
+    default: 
         break;
-}
+    }
+
     return 0;
 }
