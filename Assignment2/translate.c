@@ -145,7 +145,7 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
                 set2[set2_length - 2] = '\0';
             }
             if (set2[i - 1] == set2[i + 1]) {
-            strcpy(&set2[i - 1], &set2[i + 1]);
+                strcpy(&set2[i - 1], &set2[i + 1]);
                 set2[set2_length - 1] = '\0';
                 set2[set2_length - 2] = '\0';            
             }           
