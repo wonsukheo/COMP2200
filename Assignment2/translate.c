@@ -1,3 +1,4 @@
+/* #define _CRT_SECURE_NO_WARNINGS */
 #include <stdio.h>
 #include <string.h>
 
@@ -13,13 +14,6 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
     size_t set2_length;
     size_t i;
     size_t j;
-    strncpy(set1, argv[1], LENGTH);
-    set1[LENGTH - 1] = '\0';
-    strncpy(set2, argv[2], LENGTH);
-    set2[LENGTH - 1] = '\0';  
-    
-    set1_length = strlen(set1);
-    set2_length = strlen(set2);
 
     /* error code return */
     if (flag == 0) {
@@ -27,15 +21,33 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
             fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
             return 1;
         }
-    } 
-    if (argc < 3) {
-        fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
-        return 1;
-    }
-    if (strlen(argv[1]) + 1> LENGTH || strlen(argv[2]) + 1 > LENGTH) {
-        fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
-        return 4;
-    }     
+        if (strlen(argv[1]) + 1 > LENGTH || strlen(argv[2]) + 1 > LENGTH) {
+            fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
+            return 4;
+        }
+
+        strncpy(set1, argv[1], LENGTH);
+        set1[LENGTH - 1] = '\0';
+        strncpy(set2, argv[2], LENGTH);
+        set2[LENGTH - 1] = '\0';
+    } else if (flag == 1) {
+        if (argc != 4) {
+            fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
+            return 1;
+        }
+        if (strlen(argv[2]) + 1 > LENGTH || strlen(argv[3]) + 1 > LENGTH) {
+            fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
+            return 4;
+        }
+
+        strncpy(set1, argv[2], LENGTH);
+        set1[LENGTH - 1] = '\0';
+        strncpy(set2, argv[3], LENGTH);
+        set2[LENGTH - 1] = '\0';
+    }    
+    set1_length = strlen(set1);
+    set2_length = strlen(set2);
+
     /* check escape char */
     for (i = 0; i < set1_length; ++i) {
         if (set1[i] == '\\') {
@@ -202,14 +214,14 @@ int translate(int argc, const char** argv)
             return errormessage;
         }
         /* translate code */
-
+        while (*set1_ptr != '\0') {
+            *set1_ptr |= 32;
+            set1_ptr++;
+        }
         while (TRUE) {
             c = getchar();
             if (c == EOF) {
                 break;
-            }
-            if (c != '\n') {
-                c |= 32;
             }
             set1_ptr = strrchr(set1, c);
             if (set1_ptr != NULL) {
