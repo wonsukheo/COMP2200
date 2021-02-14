@@ -20,29 +20,29 @@ int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
             fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
             return 1;
         }
-        if (strlen(argv[1]) + 1 > LENGTH || strlen(argv[2]) + 1 > LENGTH) {
+        if (strlen(argv[1]) > LENGTH || strlen(argv[2]) > LENGTH) {
             fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
             return 4;
         }
 
         strncpy(set1, argv[1], LENGTH);
-        set1[LENGTH - 1] = '\0';
+        set1[LENGTH] = '\0';
         strncpy(set2, argv[2], LENGTH);
-        set2[LENGTH - 1] = '\0';
+        set2[LENGTH] = '\0';
     } else if (flag == 1) {
         if (argc != 4) {
             fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
             return 1;
         }
-        if (strlen(argv[2]) + 1 > LENGTH || strlen(argv[3]) + 1 > LENGTH) {
+        if (strlen(argv[2]) > LENGTH || strlen(argv[3]) > LENGTH) {
             fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
             return 4;
         }
 
         strncpy(set1, argv[2], LENGTH);
-        set1[LENGTH - 1] = '\0';
+        set1[LENGTH] = '\0';
         strncpy(set2, argv[3], LENGTH);
-        set2[LENGTH - 1] = '\0';
+        set2[LENGTH] = '\0';
     }    
     set1_length = strlen(set1);
     set2_length = strlen(set2);
