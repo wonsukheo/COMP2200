@@ -1,5 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <string.h>
 
@@ -7,8 +5,7 @@
 
 #define LENGTH (512)
 
- 
-int do_magic(int argc, char* set1, char* set2, const char** argv)
+int do_magic(int argc, char* set1, char* set2, const char** argv, int flag)
 {   
     char escape_char_cmd[10] = {'\\', 'a', 'b', 'f', 'n', 'r', 't', 'v', '\'', '\"'};
     char escape_char_c[10] = {'\\', '\a', '\b', '\f', '\n', '\r', '\t', '\v', '\'','\"'};
@@ -25,10 +22,13 @@ int do_magic(int argc, char* set1, char* set2, const char** argv)
     set2_length = strlen(set2);
 
     /* error code return */
-    if (argc != 3) {
-        fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
-        return 1;
-    } else if (strlen(argv[1]) > LENGTH || strlen(argv[2]) > LENGTH) {
+    if (flag == 0) {
+        if (argc != 3) {
+            fprintf(stdout, "%s", "ERROR_CODE_WRONG_ARGUMENTS_NUMBER"); 
+            return 1;
+        }
+    } 
+    if (strlen(argv[1]) > LENGTH || strlen(argv[2]) > LENGTH) {
         fprintf(stdout, "%s", "ERROR_CODE_ARGUMENT_TOO_LONG");
         return 4;
     }     
@@ -120,7 +120,7 @@ int translate(int argc, const char** argv)
 
     switch (flag) {
     case 0: { 
-        errormessage = do_magic(argc, set1, set2, argv);
+        errormessage = do_magic(argc, set1, set2, argv, flag);
         if (errormessage != 0) {
             return errormessage;
         }
@@ -142,7 +142,7 @@ int translate(int argc, const char** argv)
     } break;
 
     case 1: {
-        errormessage = do_magic(argc, set1, set2, argv);
+        errormessage = do_magic(argc, set1, set2, argv, flag);
         if (errormessage != 0) {
             return errormessage;
         }
